@@ -26,6 +26,7 @@ verify_cert = False
 user = "USERNAME"  # sep 账号
 passwd = r"PASSWORD"  # sep 密码
 api_key = "API_KEY"  # 可选， server 酱的通知 api key
+api_key2 = "API_KEY2"  # 可选， server 酱的通知 api key
 
 # 可选，如果需要邮件通知，那么修改下面五行 :)
 smtp_port = "SMTP_PORT"
@@ -162,7 +163,7 @@ def submit(s: requests.Session, old: dict):
     else:
         print("打卡失败，错误信息: ", r.json().get("m"))
 
-    message(api_key, sender_email, sender_email_passwd, receiver_email, result.get('m'), new_daily)
+    message(api_key, api_key2, sender_email, sender_email_passwd, receiver_email, result.get('m'), new_daily)
 
 
 def check_submit_data(data: dict):
@@ -181,12 +182,14 @@ def check_submit_data(data: dict):
     return ";".join(msg) if msg else None
 
 
-def message(key, sender, mail_passwd, receiver, subject, msg):
+def message(key, key2, sender, mail_passwd, receiver, subject, msg):
     """
     再封装一下 :) 减少调用通知写的代码
     """
     if api_key != "":
         server_chan_message(key, subject, msg)
+    if api_key2 !="":
+        server_chan_message2(key2, subject, msg)
     if sender_email != "" and receiver_email != "":
         send_email(sender, mail_passwd, receiver, subject, msg)
 
@@ -199,6 +202,13 @@ def server_chan_message(key, title, body):
     msg_url = "https://sc.ftqq.com/{}.send?text={}&desp={}".format(key, title, body)
     requests.get(msg_url)
 
+def server_chan_message2(key, title, body):
+    """
+    微信通知打卡结果
+    """
+    # 错误的key也可以发送消息，无需处理 :)
+    msg_url = "https://sctapi.ftqq.com/{}.send?title={}&desp={}".format(key, title, body)
+    requests.get(msg_url)
 
 def send_email(sender, mail_passwd, receiver, subject, msg):
     """
