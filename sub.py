@@ -202,12 +202,12 @@ def server_chan_message(key, title, body):
     msg_url = "https://sc.ftqq.com/{}.send?text={}&desp={}".format(key, title, body)
     requests.get(msg_url)
 
-def server_chan_message2(key, title, body):
+def server_chan_message2(key2, title, body):
     """
     微信通知打卡结果
     """
     # 错误的key也可以发送消息，无需处理 :)
-    msg_url = "https://sctapi.ftqq.com/{}.send?title={}&desp={}".format(key, title, body)
+    msg_url = "https://sctapi.ftqq.com/{}.send?title={}&desp={}".format(key2, title, body)
     requests.get(msg_url)
 
 def send_email(sender, mail_passwd, receiver, subject, msg):
