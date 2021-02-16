@@ -74,7 +74,7 @@ def login(s: requests.Session, username, password, cookie_file: Path):
     # print(r.text)
     if r.json().get('m') != "操作成功":
         print("登录失败")
-        message(api_key, sender_email, sender_email_passwd, receiver_email, "健康打卡登录失败", "登录失败")
+        message(api_key, api_key2, sender_email, sender_email_passwd, receiver_email, "健康打卡登录失败", "登录失败")
 
     else:
         cookie_file.write_text(json.dumps(requests.utils.dict_from_cookiejar(r.cookies), indent=2), encoding='utf-8', )
@@ -145,7 +145,7 @@ def submit(s: requests.Session, old: dict):
 
     check_data_msg = check_submit_data(new_daily)  # 检查上报结果
     if check_data_msg is not None:
-        message(api_key, sender_email, sender_email_passwd, receiver_email, "每日健康打卡-{}".format(check_data_msg),
+        message(api_key, api_key2, sender_email, sender_email_passwd, receiver_email, "每日健康打卡-{}".format(check_data_msg),
                 "{}".format(new_daily))
         print("提交数据存在问题，请手动打卡，问题原因： {}".format(check_data_msg))
         return
